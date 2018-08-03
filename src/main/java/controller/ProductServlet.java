@@ -25,6 +25,7 @@ public class ProductServlet extends HttpServlet {
         }
         switch (action) {
             case "create":
+                createProduct(request,response);
                 break;
             case "edit":
                 break;
@@ -53,6 +54,26 @@ public class ProductServlet extends HttpServlet {
             default:
                 listProduct(request,response);
                 break;
+        }
+    }
+
+    private void createProduct(HttpServletRequest request, HttpServletResponse response) {
+        String name = request.getParameter("name");
+        String price = request.getParameter("price");
+        String modal = request.getParameter("modal");
+        String producer = request.getParameter("producer");
+        int id = (int)(Math.random() * 10000);
+
+        Product product =new Product(id,name,price,modal,producer);
+        this.productService.save(product);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("customer/create.jsp");
+        request.setAttribute("message", "New customer was created");
+        try {
+            dispatcher.forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

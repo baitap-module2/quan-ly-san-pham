@@ -7,7 +7,7 @@ public class Product {
     private String modal;
     private String producer;
 
-    public Product() {
+    public Product(int id, String name, String price, String modal, String producer) {
     }
 
     public Product(int id, String name, double price, String modal, String producer) {
