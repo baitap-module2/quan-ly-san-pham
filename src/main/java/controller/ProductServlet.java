@@ -46,6 +46,7 @@ public class ProductServlet extends HttpServlet {
                 showCreateForm(request,response);
                 break;
             case "edit":
+                showEditForm(request,response);
                 break;
             case "delete":
                 break;
@@ -54,6 +55,25 @@ public class ProductServlet extends HttpServlet {
             default:
                 listProduct(request,response);
                 break;
+        }
+    }
+
+    private void showEditForm(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Product product = this.productService.findById(id);
+        RequestDispatcher dispatcher;
+        if(product == null){
+            dispatcher = request.getRequestDispatcher("error-404.jsp");
+        } else {
+            request.setAttribute("product", product);
+            dispatcher = request.getRequestDispatcher("product/edit.jsp");
+        }
+        try {
+            dispatcher.forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -66,8 +86,8 @@ public class ProductServlet extends HttpServlet {
 
         Product product =new Product(id,name,price,modal,producer);
         this.productService.save(product);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("customer/create.jsp");
-        request.setAttribute("message", "New customer was created");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("product/create.jsp");
+        request.setAttribute("message", "New product was created");
         try {
             dispatcher.forward(request, response);
         } catch (ServletException e) {
