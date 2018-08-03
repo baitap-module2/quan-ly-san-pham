@@ -148,7 +148,7 @@ public class ProductServlet extends HttpServlet {
 
     private void createProduct(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
-        String price = request.getParameter("price");
+        double price = Double.parseDouble(request.getParameter("price"));
         String modal = request.getParameter("modal");
         String producer = request.getParameter("producer");
         int id = (int)(Math.random() * 10000);
