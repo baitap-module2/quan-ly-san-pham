@@ -28,6 +28,7 @@ public class ProductServlet extends HttpServlet {
                 createProduct(request,response);
                 break;
             case "edit":
+                updateProduct(request,response);
                 break;
             case "delete":
                 break;
@@ -55,6 +56,35 @@ public class ProductServlet extends HttpServlet {
             default:
                 listProduct(request,response);
                 break;
+        }
+    }
+
+    private void updateProduct(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        double price = Double.parseDouble(request.getParameter("price"));
+        String modal = request.getParameter("modal");
+        String producer = request.getParameter("producer");
+        Product product = this.productService.findById(id);
+        RequestDispatcher dispatcher;
+        if(product == null){
+            dispatcher = request.getRequestDispatcher("error-404.jsp");
+        } else {
+            product.setName(name);
+            product.setPrice(price);
+            product.setModal(modal);
+            product.setProducer(producer);
+            this.productService.update(id, product);
+            request.setAttribute("product", product);
+            request.setAttribute("message", "Product information was updated");
+            dispatcher = request.getRequestDispatcher("product/edit.jsp");
+        }
+        try {
+            dispatcher.forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
